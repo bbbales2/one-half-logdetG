@@ -90,7 +90,29 @@ The problem with the two frameworks above is that they only work under very spec
 
 These tools do not help in any situation where more control over the transformed random variable is necessary.
 
-## No Change of Variables, No Problems
+## No Change of Variables, but the Expectations Change
 
-The goal of this case study is to highlight what we are calling *soft constraints*, another way that parameter transforms can be used in Stan programs.
+The goal of this case study is to highlight another way that parameter transforms can be used in Stan programs.
 
+One way of looking at an MCMC method is that it is a tool for computing expectations. The average of a function evaluated at the sequence of draws generated from an MCMC method approximates the expectation of that function evaluated over the distribution from which the draws came:
+
+$$
+\frac{1}{N}\sum_n^N f(\theta_n) \approx \int_\theta f(\theta) p(\theta) d\theta
+$$
+A Stan program is simply the $p(\theta)$ part of the expression on the right.
+
+To define the new transformation, first assume there is a high dimensional space $\Theta$ on which the Stan program samples. Then define a lower (or equal) dimensional (constrained) space $C$, and a coordinate chart $\phi : C \rightarrow \theta$.
+
+In this case, it is possible to rewrite an integral over the space $C$ in terms of the space $\Theta$ (https://en.wikipedia.org/wiki/Gramian_matrix):
+
+$$
+\int_C g(c) dc = \int_\Theta g(\phi^{-1}(\theta)) \det(\nabla\phi^{-1}\nabla\phi^{-T}) d\theta
+$$
+
+In particular, if $g(c) = f(c) p(c)$, then this is an expectation over the constrained space $C$.
+
+$$
+E_c[f] = \int_C f(c) p(c) dc = \int_\Theta f(\phi^{-1}(\theta)) p(\phi^{-1}(\theta)) \det(\nabla\phi^{-1}\nabla\phi^{-T}) d\theta
+$$
+
+Alright my problem with this is that as far as I can tell on Wikipedia, the coordinate chart $\phi$ has to be one to one, which leaves us in the same boat as the change of variables? What am I doing wrong.

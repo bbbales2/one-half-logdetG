@@ -106,13 +106,5 @@ To define the new transformation, first assume there is a high dimensional space
 In this case, it is possible to rewrite an integral over the space $C$ in terms of the space $\Theta$ (https://en.wikipedia.org/wiki/Gramian_matrix):
 
 $$
-\int_C g(c) dc = \int_\Theta g(\phi^{-1}(\theta)) \det(\nabla\phi^{-1}\nabla\phi^{-T}) d\theta
+\int_C g(c) dc = \int_{\phi(C)} g(c) \det(\nabla\phi^T\nabla\phi) d\theta
 $$
-
-In particular, if $g(c) = f(c) p(c)$, then this is an expectation over the constrained space $C$.
-
-$$
-E_c[f] = \int_C f(c) p(c) dc = \int_\Theta f(\phi^{-1}(\theta)) p(\phi^{-1}(\theta)) \det(\nabla\phi^{-1}\nabla\phi^{-T}) d\theta
-$$
-
-Alright my problem with this is that as far as I can tell on Wikipedia, the coordinate chart $\phi$ has to be one to one, which leaves us in the same boat as the change of variables? What am I doing wrong.
